@@ -48,7 +48,13 @@ TODO
 Import all dependencies (dev included), and configure the autoloader with the more convenient namespace map autoloader:
 
 ``` bash
-./composer.phar install --verbose --dev --prefer-dist
+./composer.phar update --verbose --dev --prefer-dist
+```
+
+It's necessary to add a row to the host machine's etc/hosts file.  The IP address should be adjusted to match the test environment:
+
+```
+192.168.56.11       www.kixeye-challenge.local
 ```
 
 ### Automated Tests

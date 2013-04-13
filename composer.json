@@ -1,11 +1,13 @@
 {
-    "name":        "kixeye/ApiChallenge",
+    "name":        "kixeye/api-challenge",
 
     "description": "A private audition challenge for KIXEYE.",
 
     "keywords": [
          "interview", "kixeye", "api", "reporting"
      ],
+
+     "license": "proprietary",
 
     "authors": [
         {
@@ -21,7 +23,7 @@
     },
 
     "require": {
-        "php": ">=5.3.5"
+        "php": ">=5.4.0"
     },
 
     "require-dev": {
@@ -31,7 +33,7 @@
 
     "autoload": {
         "psr-0": {
-        	"KixeyeChallenge": "source/"
+            "": "source/"
     	}
     }
 }
