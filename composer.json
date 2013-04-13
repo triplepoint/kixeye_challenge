@@ -1,0 +1,37 @@
+{
+    "name":        "kixeye/ApiChallenge",
+
+    "description": "A private audition challenge for KIXEYE.",
+
+    "keywords": [
+         "interview", "kixeye", "api", "reporting"
+     ],
+
+    "authors": [
+        {
+            "name":     "Jonathan Hanson",
+            "email":    "jonathan@jonathan-hanson.org",
+            "homepage": "http://www.jonathan-hanson.org/",
+            "role":     "Developer"
+        }
+    ],
+
+    "support": {
+    	"email":  "jonathan@jonathan-hanson.org"
+    },
+
+    "require": {
+        "php": ">=5.3.5"
+    },
+
+    "require-dev": {
+        "phpunit/phpunit":           "3.7.*",
+        "squizlabs/php_codesniffer": "1.4.*"
+    },
+
+    "autoload": {
+        "psr-0": {
+        	"KixeyeChallenge": "source/"
+    	}
+    }
+}
