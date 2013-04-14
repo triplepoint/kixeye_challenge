@@ -88,9 +88,9 @@ class UserScore
      */
     public function countTotalPlayerCount()
     {
-        $result = $this->database->query(
-            "SELECT count(*) AS `count` FROM `users`;"
-        );
+        $query = "SELECT count(*) AS `count` FROM `users`;";
+
+        $result = $this->database->query($query);
 
         if ($result === false) {
             throw new \Exception('Database error when loading total player count: '.$this->database->error);
@@ -114,12 +114,13 @@ class UserScore
         $start_string = $start->format(self::DB_TIME_FORMAT);
         $stop_string  = $start->add($duration)->format(self::DB_TIME_FORMAT);
 
-        $result = $this->database->query(
-            "SELECT count(*) AS `count` FROM `users`
-            LEFT JOIN `user_scores` ON `users`.`id` = `user_scores`.`user_id`
-            WHERE `user_scores`.`timestamp` BETWEEN '{$start_string}' AND '{$stop_string}'
-            GROUP BY `users`.`id`;"
-        );
+        $query = "SELECT count( DISTINCT `users`.`id`) AS `count`
+                FROM `users`
+            INNER JOIN `user_scores`
+                ON `users`.`id` = `user_scores`.`user_id`
+            WHERE `user_scores`.`timestamp` BETWEEN '{$start_string}' AND '{$stop_string}';";
+
+        $result = $this->database->query($query);
 
         if ($result === false) {
             throw new \Exception('Database error when loading player interval count: '.$this->database->error);
@@ -132,16 +133,13 @@ class UserScore
     /**
      * Fetch the collection of the top N players, by score.
      *
-     * TODO This one doesn't work
-     *
      * @param  integer $count The number of players to fetch from the top of the leaderboard.
      *
      * @return array[] The ordered collection of user rows
      */
     public function getTopPlayers($count)
     {
-        $result = $this->database->query(
-            "SELECT `t1`.*, `t2`.*
+        $query = "SELECT `t1`.*, `t2`.*
                 FROM `users` AS `t1`
             INNER JOIN
                 `user_scores` AS `t2`
@@ -155,8 +153,9 @@ class UserScore
                 ON `t2`.`user_id` = `t3`.`user_id`
                 AND `t2`.`score` = `t3`.`max_score`
             ORDER BY `t2`.`score` DESC
-            LIMIT {$count};"
-        );
+            LIMIT {$count};";
+
+        $result = $this->database->query($query);
 
         if ($result === false) {
             throw new \Exception('Database error when loading player interval count: '.$this->database->error);
@@ -178,23 +177,27 @@ class UserScore
      */
     public function getTopImprovingPlayers($count, \DateTime $start, \DateTime $stop)
     {
-        $result = $this->database->query(
-            "SELECT `t1`.*, `t2`.*
+        $start_string = $start->format(self::DB_TIME_FORMAT);
+        $stop_string  = $stop->format(self::DB_TIME_FORMAT);
+
+        $query = "SELECT `t1`.*, `t2`.*, `t3`.`delta_score`
                 FROM `users` AS `t1`
             INNER JOIN
                 `user_scores` AS `t2`
                 ON `t1`.`id` = `t2`.`user_id`
             INNER JOIN
             (
-                SELECT max(`score`) AS `max_score`, `user_id`
+                SELECT max(`score`) AS `max_score`, min(`score`) AS `min_score`, max(`score`)-min(`score`) AS `delta_score`, `user_id`
                 FROM `user_scores`
+                WHERE `user_scores`.`timestamp` BETWEEN '{$start_string}' AND '{$stop_string}'
                 GROUP BY `user_id`
             ) AS `t3`
                 ON `t2`.`user_id` = `t3`.`user_id`
                 AND `t2`.`score` = `t3`.`max_score`
             ORDER BY `t2`.`score` DESC
-            LIMIT {$count};"
-        );
+            LIMIT {$count};";
+
+        $result = $this->database->query($query);
 
         if ($result === false) {
             throw new \Exception('Database error when loading player interval count: '.$this->database->error);
