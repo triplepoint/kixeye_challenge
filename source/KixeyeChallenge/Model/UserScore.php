@@ -194,7 +194,7 @@ class UserScore
             ) AS `t3`
                 ON `t2`.`user_id` = `t3`.`user_id`
                 AND `t2`.`score` = `t3`.`max_score`
-            ORDER BY `t2`.`score` DESC
+            ORDER BY `t3`.`delta_score` DESC
             LIMIT {$count};";
 
         $result = $this->database->query($query);
