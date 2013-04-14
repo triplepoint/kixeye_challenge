@@ -20,7 +20,7 @@ server {
 
     # Images and static content is treated different
     #
-    location ~* ^.+\.(jpg|jpeg|gif|css|png|js|ico|xml|svg)$ {
+    location ~* ^.+\.(jpg|jpeg|gif|css|png|js|ico|xml|svg|html)$ {
         root              /var/www/kixeye_challenge/www;
         access_log        off;
         expires           30d;

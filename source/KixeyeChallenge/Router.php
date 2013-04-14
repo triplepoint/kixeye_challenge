@@ -3,7 +3,7 @@
 namespace KixeyeChallenge;
 
 use KixeyeLibs\Http\Request;
-use KixeyeChallenge\Controller\SomeController;
+use KixeyeChallenge\Controller\AddScoreRecord;
 
 /**
  * This router is capable of matching all the handled
@@ -15,15 +15,22 @@ class Router
      * Given the request, return a controller suitable for
      * performing the necessary business behavior and mutating
      * a response object.
+     *
+     * @param Request $request the HTTP request object
+     *
+     * @throws \KixeyeChallenge\Exception\NotFound if a controller cannot be found
+     *
+     * @return KixeyeChallenge\Controller\ControllerInterface the appropriate Controller
      */
     public function getController(Request $request)
     {
-        // TODO - This router doesn't yet route
-
-        // Interrogate the request and figure out which controller to build TODO
-        $request->getHost();
-
-        $controller = new SomeController();
-        return $controller;
+        switch ($request->getPath()) {
+            case '/v1/user/score':
+                return new AddScoreRecord();
+                break;
+            default:
+                throw new \KixeyeChallenge\Exception\NotFound();
+                break;
+        }
     }
 }
