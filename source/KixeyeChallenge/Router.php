@@ -4,6 +4,7 @@ namespace KixeyeChallenge;
 
 use KixeyeLibs\Http\Request;
 use KixeyeChallenge\Controller\AddScoreRecord;
+use KixeyeChallenge\Controller\SummaryReport;
 
 /**
  * This router is capable of matching all the handled
@@ -27,6 +28,9 @@ class Router
         switch ($request->getPath()) {
             case '/v1/user/score':
                 return new AddScoreRecord();
+                break;
+            case '/report':
+                return new SummaryReport();
                 break;
             default:
                 throw new \KixeyeChallenge\Exception\NotFound();
