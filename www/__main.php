@@ -5,7 +5,7 @@
 
 chdir(__DIR__ . '/../');
 
-ini_set('error_log', 'logs/php_error.log');
+ini_set('error_log', 'logs/php_fpm_error.log');
 ini_set('date.timezone', 'UTC');
 ini_set('upload_max_filesize', '10M');
 ini_set('log_errors', 'On');

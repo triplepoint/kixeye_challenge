@@ -60,6 +60,17 @@ passed through from Facebook's API, and `score` is an integer representing the u
 Successful API calls will respond with a JSON payload describing the inserted user's record, and a status
 message denoting a successful POST.
 
+### Populating Test Data
+Included with this project is a script for generating test score data, suitable for demonstrating the
+reporting tools.
+
+To populate the test data, first truncate the user score data in the database, and then run the generator:
+
+``` bash
+cd /wherever/you/cloned/this/repository/kixeye_challenge/bin
+./populate_test_data.php
+```
+
 ### Reporting Tool
 TODO
 
