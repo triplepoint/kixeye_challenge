@@ -74,7 +74,7 @@ cd /wherever/you/cloned/this/repository/kixeye_challenge/bin
 ```
 
 Note that 1M records takes a significant amount of time to produce - typical run times on a desktop PC
-are on the order of 1,000s.
+are on the order of 1,500s.
 
 
 ### Reporting Tool
