@@ -77,7 +77,7 @@ class SummaryReport implements ControllerInterface
             new \DateInterval('P1D')
         );
 
-        $top_ten_players = $this->user_score_model->getTopPlayers(10);
+        $top_ten_players = $this->user_score_model->getTopPlayers(11);
 
         $top_ten_improving_players = $this->user_score_model->getTopImprovingPlayers(
             10,

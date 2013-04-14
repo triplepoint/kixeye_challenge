@@ -115,8 +115,8 @@ class UserScore
         $stop_string  = $start->add($duration)->format(self::DB_TIME_FORMAT);
 
         $result = $this->database->query(
-            "SELECT count(*) as `count` FROM `users`
-            LEFT JOIN `user_scores` on `users`.`id` = `user_scores`.`user_id`
+            "SELECT count(*) AS `count` FROM `users`
+            LEFT JOIN `user_scores` ON `users`.`id` = `user_scores`.`user_id`
             WHERE `user_scores`.`timestamp` BETWEEN '{$start_string}' AND '{$stop_string}'
             GROUP BY `users`.`id`;"
         );
@@ -142,9 +142,8 @@ class UserScore
     {
         $result = $this->database->query(
             "SELECT * FROM `users`
-            LEFT JOIN `user_scores` on `users`.`id` = `user_scores`.`user_id`
-            GROUP BY `users`.`id`
-            ORDER BY `user_scores`.`score` desc
+            LEFT JOIN `user_scores` ON `users`.`id` = `user_scores`.`user_id`
+            ORDER BY `user_scores`.`score` DESC
             LIMIT {$count};"
         );
 
@@ -170,9 +169,9 @@ class UserScore
     {
         $result = $this->database->query(
             "SELECT * FROM `users`
-            LEFT JOIN `user_scores` on `users`.`id` = `user_scores`.`user_id`
+            LEFT JOIN `user_scores` ON `users`.`id` = `user_scores`.`user_id`
             GROUP BY `users`.`id`
-            ORDER BY `user_scores`.`score` desc
+            ORDER BY `user_scores`.`score` DESC
             LIMIT {$count};"
         );
 
