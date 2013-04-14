@@ -141,9 +141,20 @@ class UserScore
     public function getTopPlayers($count)
     {
         $result = $this->database->query(
-            "SELECT * FROM `users`
-            LEFT JOIN `user_scores` ON `users`.`id` = `user_scores`.`user_id`
-            ORDER BY `user_scores`.`score` DESC
+            "SELECT `t1`.*, `t2`.*
+                FROM `users` AS `t1`
+            INNER JOIN
+                `user_scores` AS `t2`
+                ON `t1`.`id` = `t2`.`user_id`
+            INNER JOIN
+            (
+                SELECT max(`score`) AS `max_score`, `user_id`
+                FROM `user_scores`
+                GROUP BY `user_id`
+            ) AS `t3`
+                ON `t2`.`user_id` = `t3`.`user_id`
+                AND `t2`.`score` = `t3`.`max_score`
+            ORDER BY `t2`.`score` DESC
             LIMIT {$count};"
         );
 
@@ -168,10 +179,20 @@ class UserScore
     public function getTopImprovingPlayers($count, \DateTime $start, \DateTime $stop)
     {
         $result = $this->database->query(
-            "SELECT * FROM `users`
-            LEFT JOIN `user_scores` ON `users`.`id` = `user_scores`.`user_id`
-            GROUP BY `users`.`id`
-            ORDER BY `user_scores`.`score` DESC
+            "SELECT `t1`.*, `t2`.*
+                FROM `users` AS `t1`
+            INNER JOIN
+                `user_scores` AS `t2`
+                ON `t1`.`id` = `t2`.`user_id`
+            INNER JOIN
+            (
+                SELECT max(`score`) AS `max_score`, `user_id`
+                FROM `user_scores`
+                GROUP BY `user_id`
+            ) AS `t3`
+                ON `t2`.`user_id` = `t3`.`user_id`
+                AND `t2`.`score` = `t3`.`max_score`
+            ORDER BY `t2`.`score` DESC
             LIMIT {$count};"
         );
 
