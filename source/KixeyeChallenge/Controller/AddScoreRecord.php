@@ -3,7 +3,7 @@
 namespace KixeyeChallenge\Controller;
 
 use KixeyeChallenge\Controller\ControllerInterface;
-use KixeyeLibs\ServiceContainer;
+use KixeyeLibs\ServiceContainer\ServiceContainer;
 use KixeyeLibs\Http\Request;
 use KixeyeLibs\Http\Response;
 

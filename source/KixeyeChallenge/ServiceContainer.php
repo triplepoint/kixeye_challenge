@@ -2,7 +2,7 @@
 
 namespace KixeyeChallenge;
 
-use \KixeyeLibs\ServiceContainer as LibsServiceContainer;
+use \KixeyeLibs\ServiceContainer\ServiceContainer as LibsServiceContainer;
 use \KixeyeChallenge\Router;
 use \KixeyeLibs\Http\Request;
 use \KixeyeLibs\Http\Response;
