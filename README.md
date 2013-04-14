@@ -72,7 +72,7 @@ cd /wherever/you/cloned/this/repository/kixeye_challenge/bin
 ```
 
 ### Reporting Tool
-TODO
+The summary report is available at the `/report` route (so for example `http://www.kixeye-challenge.local/report`).
 
 
 ## Testing

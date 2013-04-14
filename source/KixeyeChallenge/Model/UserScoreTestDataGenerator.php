@@ -18,6 +18,48 @@ class UserScoreTestDataGenerator
     const DB_TIME_FORMAT = 'Y-m-d H:i:s';
 
     /**
+     * What score does a new user start with?
+     *
+     * @var integer
+     */
+    const STARTING_SCORE = 1000;
+
+    /**
+     * What's the maximum a users's score can jump
+     * between scoring events?
+     *
+     * @var integer
+     */
+    const MAX_SCORE_INCREASE = 1e4;
+
+    /**
+     * For a given user, what is the maximum
+     * duration between one scoring event and the next?
+     *
+     * This is in units of percentage of the current
+     * amount of time left in the simulation range, counting
+     * from the user's last scoring event.  0.01 = 1 percent.
+     */
+    const MAX_TIME_BETWEEN_SCORE_EVENTS = 0.05;
+
+    /**
+     * What are the odds of any given score event
+     * being a new user?  In units of "1 in X".
+     *
+     * @var integer
+     */
+    const ODDS_OF_NEW_USER = 50;
+
+    /**
+     * What are the odds of any given scoring event
+     * being the time when a random user quits?
+     * In units of "1 in X".
+     *
+     * @var integer
+     */
+    const ODDS_OF_QUITTING_USER = 500;
+
+    /**
      * The start time for the simulation
      *
      * @var \DateTime
@@ -95,10 +137,10 @@ class UserScoreTestDataGenerator
         for ($i=0; $i<$score_count; $i++) {
 
             // Should we generate a new user?  Let's say about 1 in 50 scores is against a new user.
-            if (count($this->generated_fb_ids) === 0 || mt_rand(1, 50) === 50) {
+            if ($this->isNewFacebookId()) {
                 $fb_id = $this->generateRandomNewFacebookId();
                 $this->generated_fb_ids[$fb_id] = [
-                    'latest_score'     => 1000,
+                    'latest_score'     => self::STARTING_SCORE,
                     'latest_timestamp' => $this->start_time,
                 ];
 
@@ -121,7 +163,20 @@ class UserScoreTestDataGenerator
                 $this->generated_fb_ids[$fb_id]['latest_score'],
                 $this->generated_fb_ids[$fb_id]['latest_timestamp']->format(self::DB_TIME_FORMAT)
             );
+
+            // Players quit - for the data to look good, people need to drop out
+            $this->cullPlayers();
         }
+    }
+
+    /**
+     * Is is time for a new facebook ID to be generated?
+     *
+     * @return boolean if true, a new facebook ID will be generated for this record
+     */
+    protected function isNewFacebookId()
+    {
+        return (count($this->generated_fb_ids) === 0 || mt_rand(1, self::ODDS_OF_NEW_USER) === 1);
     }
 
     /**
@@ -137,7 +192,8 @@ class UserScoreTestDataGenerator
 
         $return_string = '';
 
-        for ($j=0; $j<5; $j++) {
+        // Try 10 times to find a collision-less id, before throwing an exception
+        for ($j=0; $j<10; $j++) {
             for ($i=0; $i<15; $i++) {
                 $character_position = rand(0, strlen($potential_characters) - 1);
                 $return_string .= substr($potential_characters, $character_position, 1);
@@ -153,7 +209,7 @@ class UserScoreTestDataGenerator
 
     /**
      * Return a new score, with a random increment between 0
-     * and 10,000.
+     * and self::MAX_SCORE_INCREASE.
      *
      * @param  integer $score The current score
      *
@@ -161,7 +217,7 @@ class UserScoreTestDataGenerator
      */
     protected function increaseScore($score)
     {
-        return floor($score + mt_rand(0, 1e4));
+        return floor($score + mt_rand(0, self::MAX_SCORE_INCREASE));
     }
 
     /**
@@ -179,11 +235,26 @@ class UserScoreTestDataGenerator
         $duration_to_end_in_seconds = $stop - $current;
 
         // The next timestamp is between 0 and 1% closer to the end time than the current time stamp
-        $percent_increment = mt_rand(0, 100) / 10000;
+        $percent_increment = mt_rand(0, self::MAX_TIME_BETWEEN_SCORE_EVENTS * 100) / 100;
         $increment_seconds = floor($duration_to_end_in_seconds * $percent_increment);
 
         $new_timestamp = $current + $increment_seconds;
 
         return new \DateTime(date(self::DB_TIME_FORMAT, $new_timestamp));
+    }
+
+    /**
+     * Players have a chance to drop off the list of available user IDs.
+     * This method occasssionally 'retires' a random facebook ID.
+     *
+     * @return void
+     */
+    protected function cullPlayers()
+    {
+        // Is someone going to die this turn?
+        if (count($this->generated_fb_ids) !== 0 && mt_rand(1, self::ODDS_OF_QUITTING_USER) === 1) {
+            $random_user_id = array_rand($this->generated_fb_ids);
+            unset($this->generated_fb_ids[$random_user_id]);
+        }
     }
 }

@@ -1,0 +1,12 @@
+body {
+    color: white;
+    background-color: black;
+}
+
+div {
+    background-color: white;
+}
+
+span.single_result {
+    font-size: 5em;
+}
