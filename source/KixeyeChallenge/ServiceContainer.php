@@ -8,6 +8,7 @@ use \KixeyeLibs\Http\Request;
 use \KixeyeLibs\Http\Response;
 use \KixeyeLibs\Facebook\SignedRequestParser;
 use \KixeyeChallenge\Model\UserScore;
+use \KixeyeLibs\Template\Renderer;
 
 /**
  * This is the main service container used to construct
@@ -58,5 +59,10 @@ class ServiceContainer extends LibsServiceContainer
             $secret = $this['config_values']['facebook_application']['secret'];
             return new SignedRequestParser($app_id, $secret);
         };
+
+        $this['template_renderer'] = function () {
+            return new Renderer();
+        };
+
     }
 }
