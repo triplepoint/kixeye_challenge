@@ -180,7 +180,7 @@ class UserScore
         $start_string = $start->format(self::DB_TIME_FORMAT);
         $stop_string  = $stop->format(self::DB_TIME_FORMAT);
 
-        $query = "SELECT `t1`.*, `t2`.*, `t3`.`delta_score`
+        $query = "SELECT `t1`.*, `t2`.*, `t3`.`min_score`, `t3`.`max_score`, `t3`.`delta_score`
                 FROM `users` AS `t1`
             INNER JOIN
                 `user_scores` AS `t2`

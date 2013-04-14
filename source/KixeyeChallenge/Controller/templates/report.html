@@ -1,29 +1,30 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta charset="utf-8" />
         <title>KIXEYE Challenge - Summary Report</title>
         <link rel="stylesheet" type="text/css" href="resources/css/main.css" />
     </head>
     <body>
         <div>
             <h1>"How many total players are there?"</h1>
-            <span class="single_result"><?= $data['player_count'] ?></span>
+            <span class="single_result"><?= number_format($data['player_count']) ?></span>
         </div>
 
         <div>
             <h1>"How many people played the game today?"</h1>
-            <span class="single_result"><?= $data['daily_player_count'] ?></span>
+            <span class="single_result"><?= number_format($data['daily_player_count']) ?></span>
         </div>
 
         <div>
-            <h1>"Top ten players by score"</h1>
+            <h1>"Top <?=count($data['top_ten_players'])?> players by score"</h1>
             <ol>
                 <?php
                 foreach ($data['top_ten_players'] as $player) {
                     ?>
                     <li>
-                        <span class="score"><?= $player['score'] ?></span> -
-                        <span class="fb_id"><?= $player['fb_id'] ?></span>
+                        <span class="score"><?= number_format($player['score']) ?></span> |
+                        <span class="fb_id">ID:<?= $player['fb_id'] ?></span>
                     </li>
                     <?php
                 }
@@ -32,14 +33,16 @@
         </div>
 
         <div>
-            <h1>"Top ten players who improved their score over the week"</h1>
+            <h1>"Top <?=count($data['top_ten_improving_players'])?> players who improved their score over the week"</h1>
             <ol>
                 <?php
                 foreach ($data['top_ten_improving_players'] as $player) {
                     ?>
                     <li>
-                        <span class="score"><?= $player['score'] ?></span> -
-                        <span class="fb_id"><?= $player['fb_id'] ?></span>
+                        (<span class="score"><?= number_format($player['max_score']) ?></span> -
+                        <span class="score"><?= number_format($player['min_score']) ?></span>) =
+                        <span class="score">&Delta;<?= number_format($player['delta_score']) ?></span> |
+                        <span class="fb_id">ID:<?= $player['fb_id'] ?></span>
                     </li>
                     <?php
                 }

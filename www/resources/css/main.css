@@ -5,6 +5,7 @@ body {
 
 div {
     background-color: white;
+    margin: 10px;
 }
 
 span.single_result {
