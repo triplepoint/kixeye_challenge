@@ -28,11 +28,11 @@ class AddScoreRecord implements ControllerInterface
     protected $facebook_request_parser;
 
     /**
-     * The database connection object
+     * The model object which handles User scores.
      *
-     * @var \mysqli
+     * @var \KixeyeChallenge\Model\UserScore
      */
-    protected $database;
+    protected $user_score_model;
 
     /**
      * Pass in a service container which can act as a service locator
@@ -46,7 +46,7 @@ class AddScoreRecord implements ControllerInterface
     {
         $this->request                 = $service_locator['request'];
         $this->facebook_request_parser = $service_locator['facebook_request_parser'];
-        $this->database                = $service_locator['database_connection'];
+        $this->user_score_model        = $service_locator['user_score_model'];
     }
 
     /**
@@ -72,7 +72,7 @@ class AddScoreRecord implements ControllerInterface
 
         $score = $this->getScoreFromRequest();
 
-        $this->writeUserAndScoreToDatabase(
+        $this->user_score_model->writeUserAndScoreToDatabase(
             $parsed_message['user_id'],
             $parsed_message['user'],
             $score
@@ -132,42 +132,5 @@ class AddScoreRecord implements ControllerInterface
         $score = (integer) $post_vars['score'];
 
         return $score;
-    }
-
-    /**
-     * Write the user and score data out to the database
-     *
-     * @param string  $user_id The Facebook user ID
-     * @param array   $user    The Facebook user description
-     * @param integer $score   The user's new score
-     *
-     * @return void
-     */
-    protected function writeUserAndScoreToDatabase($user_id, $user, $score)
-    {
-        $score        = $this->database->real_escape_string($score);
-        $user_id      = $this->database->real_escape_string($user_id);
-        $user_country = $this->database->real_escape_string($user['country']);
-        $user_locale  = $this->database->real_escape_string($user['locale']);
-        $now          = date('Y-m-d H:i:s');
-
-        // Insert the user record, if it doesn't already exist
-        $this->database->query(
-            "INSERT INTO `users` (`fb_id`, `country`, `locale`)
-            SELECT *
-                FROM (
-                    SELECT '{$user_id}', '{$user_country}', '{$user_locale}') AS `tmp`
-                    WHERE NOT EXISTS (
-                        SELECT `fb_id` FROM `users` WHERE `fb_id` = '{$user_id}'
-                    )
-                LIMIT 1;"
-        );
-
-        // Insert the score record
-        $this->database->query(
-            "INSERT INTO `user_scores` (`user_id`, `score`, `timestamp`)
-            SELECT `id`, '{$score}', '{$now}' AS `tmp`
-                FROM `users` WHERE `fb_id`='{$user_id}';"
-        );
     }
 }

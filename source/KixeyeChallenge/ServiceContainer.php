@@ -7,6 +7,7 @@ use \KixeyeChallenge\Router;
 use \KixeyeLibs\Http\Request;
 use \KixeyeLibs\Http\Response;
 use \KixeyeLibs\Facebook\SignedRequestParser;
+use \KixeyeChallenge\Model\UserScore;
 
 /**
  * This is the main service container used to construct
@@ -45,6 +46,11 @@ class ServiceContainer extends LibsServiceContainer
             $port     = $this['config_values']['database_credentials']['port'];
             $socket   = $this['config_values']['database_credentials']['socket'];
             return new \mysqli($host, $user, $password, $db_name, $port, $socket);
+        };
+
+        $this['user_score_model'] = function () {
+            $database = $this['database_connection'];
+            return new UserScore($database);
         };
 
         $this['facebook_request_parser'] = function () {

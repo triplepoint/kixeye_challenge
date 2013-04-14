@@ -10,7 +10,7 @@ Lacking an issue management tool, I'll do this the old fashioned way: with a txt
 
 - Database
   - X Contains user score, indexed by user's unique ID extracted from facebook request
-  - Test script to generate 1M records of test data
+  - X Test script to generate 1M records of test data
 
 - Report
   - Must answer "How many total players are there?"
