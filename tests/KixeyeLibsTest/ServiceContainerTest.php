@@ -2,7 +2,7 @@
 
 namespace KixeyeLibsTest;
 
-use KixeyeLibs\ServiceContainer;
+use KixeyeLibs\ServiceContainer\ServiceContainer;
 
 class ServiceContainerTest extends \PHPUnit_Framework_TestCase
 {

@@ -2,7 +2,7 @@
 
 namespace KixeyeChallenge\Controller;
 
-use KixeyeLibs\ServiceContainer;
+use KixeyeLibs\ServiceContainer\ServiceContainer;
 use KixeyeLibs\Http\Response;
 
 /**

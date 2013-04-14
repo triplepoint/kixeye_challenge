@@ -1,6 +1,6 @@
 <?php
 
-namespace KixeyeLibs;
+namespace KixeyeLibs\ServiceContainer;
 
 /**
  * Classes which extend this service container can serve
