@@ -16,13 +16,13 @@
         </div>
 
         <div>
-            <h1>"List the top ten players by score"</h1>
+            <h1>"Top ten players by score"</h1>
             <ol>
                 <?php
                 foreach ($data['top_ten_players'] as $player) {
                     ?>
                     <li>
-                        <span class="score"><?= $player['score'] ?></span>
+                        <span class="score"><?= $player['score'] ?></span> -
                         <span class="fb_id"><?= $player['fb_id'] ?></span>
                     </li>
                     <?php
@@ -32,13 +32,13 @@
         </div>
 
         <div>
-            <h1>"List the top 10 players who improved their score over the week"</h1>
+            <h1>"Top ten players who improved their score over the week"</h1>
             <ol>
                 <?php
                 foreach ($data['top_ten_improving_players'] as $player) {
                     ?>
                     <li>
-                        <span class="score"><?= $player['score'] ?></span>
+                        <span class="score"><?= $player['score'] ?></span> -
                         <span class="fb_id"><?= $player['fb_id'] ?></span>
                     </li>
                     <?php

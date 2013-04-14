@@ -21,5 +21,6 @@ CREATE TABLE IF NOT EXISTS `user_scores` (
     `user_id` INT UNSIGNED NOT NULL,
     `score` INT UNSIGNED NOT NULL,
     `timestamp` DATETIME NOT NULL,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    INDEX `user_id_score` (`user_id`, `score`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
