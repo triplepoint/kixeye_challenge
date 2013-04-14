@@ -2,8 +2,8 @@
 
 namespace KixeyeChallenge\Controller;
 
+use KixeyeLibs\ServiceContainer;
 use KixeyeLibs\Http\Response;
-use KixeyeChallenge\Controller\ControllerInterface;
 
 /**
  * Classes which implement this interface are controllers,
@@ -13,12 +13,24 @@ use KixeyeChallenge\Controller\ControllerInterface;
 interface ControllerInterface
 {
     /**
-     * Investigate the given Response, and return the
-     * appropriate controller.
+     * Pass in a service container which can act as a service locator
+     * and continue to provide resources for use in fulfilling this request.
+     *
+     * @param ServiceContainer $service_locator The service locator dependency
+     *
+     * @return void
+     */
+    public function setServiceLocator(ServiceContainer $service_locator);
+
+    /**
+     * Perform the action that this controller embodies, and populate the
+     * given Response object to reflect the results of this action.
      *
      * @param  Response $response The response to use to choose the controller
      *
-     * @return ControllerInterface The controller chosen to handle the request
+     * @throws \KixeyeChallenge\Exception\MethodNotAllowed if the HTTP method is not one of the allowed methods
+     *
+     * @return void
      */
-    public function populateResponse(Response $response);
+    public function performAction(Response $response);
 }

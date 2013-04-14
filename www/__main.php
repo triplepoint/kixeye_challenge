@@ -29,6 +29,7 @@ set_error_handler($error_handler);
 // Initialize the class autoloader
 require __DIR__ . '/../vendor/autoload.php';
 
+// Initialize the service container and proceed to handling the page request
 $service_container = new \KixeyeChallenge\ServiceContainer();
 
 try {
@@ -37,19 +38,18 @@ try {
     $request = $service_container['request'];
 
     $controller = $router->getController($request);
+    $controller->setServiceLocator($service_container);
 
     $response = $service_container['response'];
 
-    $controller->populateResponse($response);
+    $controller->performAction($response);
 
     $response->send();
-
-    exit();
 
 } catch (\KixeyeChallenge\Exception\NotFound $e) {
     $response = $service_container['response'];
     $response->setStatusCode(404);
-    $response->setBody('404\'ed!');
+    $response->setBody('Not Found.');
     $response->send();
 
 } catch (\KixeyeChallenge\Exception\MethodNotAllowed $e) {
@@ -61,6 +61,6 @@ try {
 } catch (\Exception $e) {
     $response = $service_container['response'];
     $response->setStatusCode(500);
-    $response->setBody('This one\'s serious.');
+    $response->setBody('There was an unexpected system error.');
     $response->send();
 }
