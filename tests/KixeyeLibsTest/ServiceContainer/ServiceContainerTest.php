@@ -1,6 +1,6 @@
 <?php
 
-namespace KixeyeLibsTest;
+namespace KixeyeLibsTest\ServiceContainer;
 
 use KixeyeLibs\ServiceContainer\ServiceContainer;
 
