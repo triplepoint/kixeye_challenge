@@ -19,7 +19,7 @@ class Renderer
      *
      * @return string the rendered template
      */
-    public function render($path, $data = array())
+    public function render($path, $data = [])
     {
         ob_start();
 

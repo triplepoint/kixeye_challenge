@@ -12,6 +12,13 @@ namespace KixeyeChallenge\Model;
 class UserScore
 {
     /**
+     * A convenient constant, used for mysql date values
+     *
+     * @var string
+     */
+    const DB_TIME_FORMAT = 'Y-m-d H:i:s';
+
+    /**
      * The database connection object
      *
      * @var \mysqli
@@ -47,7 +54,7 @@ class UserScore
         $timestamp    = $timestamp ?: date('Y-m-d H:i:s');
 
         // Insert the user record, if it doesn't already exist
-        $this->database->query(
+        $result = $this->database->query(
             "INSERT INTO `users` (`fb_id`, `country`, `locale`)
             SELECT *
                 FROM (
@@ -58,11 +65,121 @@ class UserScore
                 LIMIT 1;"
         );
 
+        if ($result === false) {
+            throw new \Exception('Database error when inserting user record: '.$this->database->error);
+        }
+
         // Insert the score record
-        $this->database->query(
+        $result = $this->database->query(
             "INSERT INTO `user_scores` (`user_id`, `score`, `timestamp`)
             SELECT `id`, '{$score}', '{$timestamp}' AS `tmp`
                 FROM `users` WHERE `fb_id`='{$user_id}';"
         );
+
+        if ($result === false) {
+            throw new \Exception('Database error when inserting user score record: '.$this->database->error);
+        }
+    }
+
+    /**
+     * Fetch the total count of unique players in the system, for all time
+     *
+     * @return integer the count of unique players
+     */
+    public function countTotalPlayerCount()
+    {
+        $result = $this->database->query(
+            "SELECT count(*) AS `count` FROM `users`;"
+        );
+
+        if ($result === false) {
+            throw new \Exception('Database error when loading total player count: '.$this->database->error);
+        }
+
+        $row = $result->fetch_assoc();
+        return $row['count'];
+    }
+
+    /**
+     * Fetch the count of unique users who registered scoring events during the given
+     * time interval.
+     *
+     * @param  \DateTime     $start    The beginning of the target window
+     * @param  \DateInterval $duration The duration of the target window
+     *
+     * @return integer the count of unique players who logged scores during the time interval
+     */
+    public function countUsersWithScoreEventsInPeriod(\DateTime $start, \DateInterval $duration)
+    {
+        $start_string = $start->format(self::DB_TIME_FORMAT);
+        $stop_string  = $start->add($duration)->format(self::DB_TIME_FORMAT);
+
+        $result = $this->database->query(
+            "SELECT count(*) as `count` FROM `users`
+            LEFT JOIN `user_scores` on `users`.`id` = `user_scores`.`user_id`
+            WHERE `user_scores`.`timestamp` BETWEEN '{$start_string}' AND '{$stop_string}'
+            GROUP BY `users`.`id`;"
+        );
+
+        if ($result === false) {
+            throw new \Exception('Database error when loading player interval count: '.$this->database->error);
+        }
+
+        $row = $result->fetch_assoc();
+        return $row['count'];
+    }
+
+    /**
+     * Fetch the collection of the top N players, by score.
+     *
+     * TODO This one doesn't work
+     *
+     * @param  integer $count The number of players to fetch from the top of the leaderboard.
+     *
+     * @return array[] The ordered collection of user rows
+     */
+    public function getTopPlayers($count)
+    {
+        $result = $this->database->query(
+            "SELECT * FROM `users`
+            LEFT JOIN `user_scores` on `users`.`id` = `user_scores`.`user_id`
+            GROUP BY `users`.`id`
+            ORDER BY `user_scores`.`score` desc
+            LIMIT {$count};"
+        );
+
+        if ($result === false) {
+            throw new \Exception('Database error when loading player interval count: '.$this->database->error);
+        }
+
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
+    /**
+     * Fetch the collection of the top N players, by score improvement over the given interval.
+     *
+     * TODO This one doesn't work
+     *
+     * @param  integer   $count The number of players to fetch from the top of the leaderboard.
+     * @param  \DateTime $start The beginning of the target window
+     * @param  \DateTime $stop  The end of the target window
+     *
+     * @return array[] The ordered collection of user rows
+     */
+    public function getTopImprovingPlayers($count, \DateTime $start, \DateTime $stop)
+    {
+        $result = $this->database->query(
+            "SELECT * FROM `users`
+            LEFT JOIN `user_scores` on `users`.`id` = `user_scores`.`user_id`
+            GROUP BY `users`.`id`
+            ORDER BY `user_scores`.`score` desc
+            LIMIT {$count};"
+        );
+
+        if ($result === false) {
+            throw new \Exception('Database error when loading player interval count: '.$this->database->error);
+        }
+
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
 }

@@ -1,8 +1,50 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>KIXEYE Challenge - Summary Report</title>
+        <link rel="stylesheet" type="text/css" href="resources/css/main.css" />
     </head>
     <body>
-        <h1><?= $data['date'] ?></h1>
+        <div>
+            <h1>"How many total players are there?"</h1>
+            <span class="single_result"><?= $data['player_count'] ?></span>
+        </div>
+
+        <div>
+            <h1>"How many people played the game today?"</h1>
+            <span class="single_result"><?= $data['daily_player_count'] ?></span>
+        </div>
+
+        <div>
+            <h1>"List the top ten players by score"</h1>
+            <ol>
+                <?php
+                foreach ($data['top_ten_improving_players'] as $player) {
+                    ?>
+                    <li>
+                        <span class="score"><?= $player['score'] ?></span>
+                        <span class="fb_id"><?= $player['fb_id'] ?></span>
+                    </li>
+                    <?php
+                }
+                ?>
+            </ol>
+        </div>
+
+        <div>
+            <h1>"List the top 10 players who improved their score over the week"</h1>
+            <ol>
+                <?php
+                foreach ($data['top_ten_improving_players'] as $player) {
+                    ?>
+                    <li>
+                        <span class="score"><?= $player['score'] ?></span>
+                        <span class="fb_id"><?= $player['fb_id'] ?></span>
+                    </li>
+                    <?php
+                }
+                ?>
+            </ol>
+        </div>
     </body>
 </html>

@@ -70,12 +70,29 @@ class SummaryReport implements ControllerInterface
         }
 
         // Fetch the report data
+        $player_count = $this->user_score_model->countTotalPlayerCount();
+
+        $daily_player_count = $this->user_score_model->countUsersWithScoreEventsInPeriod(
+            new \DateTime('now - 24 hours'),
+            new \DateInterval('P1D')
+        );
+
+        $top_ten_players = $this->user_score_model->getTopPlayers(10);
+
+        $top_ten_improving_players = $this->user_score_model->getTopImprovingPlayers(
+            10,
+            new \DateTime('last monday 00:00:00'),
+            new \DateTime('this sunday 23:59:59')
+        );
 
         // Render the template for the report page
         $body = $this->template_renderer->render(
             __DIR__ . '/templates/report.html',
             [
-                'date' => date('Y-m-d')
+                'player_count'              => $player_count,
+                'daily_player_count'        => $daily_player_count,
+                'top_ten_players'           => $top_ten_players,
+                'top_ten_improving_players' => $top_ten_improving_players,
             ]
         );
 
