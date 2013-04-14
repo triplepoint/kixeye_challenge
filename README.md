@@ -5,15 +5,16 @@
 This project was written from scratch, in the 24 hours between 2013-04-13 09:00:00PDT and 2013-04-14 09:00:00PDT.  As such, there
 are some corners cut, notably in the area of deployment infrastructure.  In addition, due to the
 audition nature of this project, I've chosen to implement code from scratch in places where I would typically have
-used off the shelf 3rd party libraries.
+used off-the-shelf 3rd party libraries.
 
-Note the docs/running_todo.md file, which is serving as a project status board.  It's git commit history
-should be useful in tracing the process I went through to finish this project.
+Note the docs/running_todo.md file, which is serving as a project status board.  Its git commit history
+should be useful in tracking the process I went through to finish this project.
 
 
 ## Installing
 ### Install Composer
-Composer handles the project dependencies and autoloader (see composer.json for dependency details):
+Composer handles the project dependencies and autoloader (see composer.json for dependency details). It
+can be installed with this:
 
 ``` bash
 cd /wherever/you/cloned/this/repository/kixeye_challenge
@@ -22,7 +23,7 @@ php -r "eval('?>'.file_get_contents('https://getcomposer.org/installer'));"
 
 ### Setup Composer
 In a production environment, we want the autoloader as optimized as possible, and the development
-dependnecies to not be present.  This command will call composerwith the more efficient classmap
+dependencies to not be present.  This command will call Composer with the more efficient classmap
 autoloader and without the testing dev dependencies:
 
 ``` bash
@@ -51,6 +52,7 @@ file and only distribute the example file without any secure credentials.  Owing
 however, I've decided to ship the actual config file as well.  I trust there's no actual security
 risk here.
 
+
 ## Use
 ### API Call
 The score API has a single route at `/v1/user/score` which only accepts POST requests.
@@ -70,6 +72,10 @@ To populate the test data, first truncate the user score data in the database, a
 cd /wherever/you/cloned/this/repository/kixeye_challenge/bin
 ./populate_test_data.php
 ```
+
+Note that 1M records takes a significant amount of time to produce - typical run times on a desktop PC
+are on the order of 1,000s.
+
 
 ### Reporting Tool
 The summary report is available at the `/report` route (so for example `http://www.kixeye-challenge.local/report`).

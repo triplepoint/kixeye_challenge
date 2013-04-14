@@ -3,12 +3,13 @@
 namespace KixeyeChallenge;
 
 use \KixeyeLibs\ServiceContainer\ServiceContainer as LibsServiceContainer;
-use \KixeyeChallenge\Router;
 use \KixeyeLibs\Http\Request;
 use \KixeyeLibs\Http\Response;
 use \KixeyeLibs\Facebook\SignedRequestParser;
-use \KixeyeChallenge\Model\UserScore;
 use \KixeyeLibs\Template\Renderer;
+use \KixeyeChallenge\Router;
+use \KixeyeChallenge\Model\UserScore;
+
 
 /**
  * This is the main service container used to construct

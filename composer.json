@@ -1,7 +1,7 @@
 {
     "name":        "kixeye/api-challenge",
 
-    "description": "A private audition challenge for KIXEYE.",
+    "description": "An audition challenge for KIXEYE.",
 
     "keywords": [
          "interview", "kixeye", "api", "reporting"

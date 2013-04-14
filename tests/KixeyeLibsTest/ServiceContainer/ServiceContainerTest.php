@@ -6,6 +6,12 @@ use KixeyeLibs\ServiceContainer\ServiceContainer;
 
 class ServiceContainerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @covers \KixeyeLibs\ServiceContainer\ServiceContainer::offsetGet
+     * @covers \KixeyeLibs\ServiceContainer\ServiceContainer::offsetSet
+     *
+     * @return void
+     */
     public function testContainerCanStoreScalarValues()
     {
         $container = new ServiceContainer();
@@ -16,7 +22,10 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \KixeyeLibs\ServiceContainer\ServiceContainer::offsetSet
      * @expectedException \Exception
+     *
+     * @return void
      */
     public function testContainerExceptsOnNullIndexSet()
     {
@@ -26,7 +35,10 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \KixeyeLibs\ServiceContainer\ServiceContainer::offsetGet
      * @expectedException \Exception
+     *
+     *  @return void
      */
     public function testContainerExceptsOnNonexistentGet()
     {
@@ -35,6 +47,11 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
         $value = $container['index'];
     }
 
+    /**
+     * @covers \KixeyeLibs\ServiceContainer\ServiceContainer::offsetGet
+     *
+     * @return void
+     */
     public function testContainerEvaluatesClosureOnGet()
     {
         $container = new ServiceContainer();
