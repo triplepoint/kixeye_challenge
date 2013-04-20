@@ -1,19 +1,19 @@
-############
-## Windows
-############
-
 # Windows image file caches
 Thumbs.db
 
-# Folder config file
+# Mac folder view config
+.DS_Store
 Desktop.ini
 
-# Mac crap
-.DS_Store
+# Python compiled files
+*.py[co]
 
-
-
-# Custom Project Ignores
-## Ignore the Composer-managed stuff
+# PHP Composer files
 /composer.phar
+# /composer.lock
 /vendor/
+
+# Sass
+## From https://github.com/github/gitignore
+### SASS Ignores - "Sassy CSS" http://sass-lang.com/
+*.sass-cache
